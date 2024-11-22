@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import mapboxgl, { Map } from 'mapbox-gl';
 
 mapboxgl.accessToken = 'your_mapbox_access_token'; // Replace with your Mapbox access token
@@ -220,8 +220,8 @@ const MapComponent: React.FC = () => {
   useEffect(() => {
     if (mapContainerRef.current) {
       // Initialize the map
-      mapboxgl.accessToken =
-      "pk.eyJ1IjoibG92ZXJvc2UxMjM0NSIsImEiOiJjbTNzb2dxZDIwMGpvMmtzY3dmdWN1bTZwIn0.yV8rSqXjiW2Tqzo6Rk01kw";
+    //   mapboxgl.accessToken =
+    //   "pk.eyJ1IjoibG92ZXJvc2UxMjM0NSIsImEiOiJjbTNzb2dxZDIwMGpvMmtzY3dmdWN1bTZwIn0.yV8rSqXjiW2Tqzo6Rk01kw";
       mapRef.current = new mapboxgl.Map({
         container: mapContainerRef.current,
         style: 'mapbox://styles/mapbox/streets-v11',
@@ -266,9 +266,10 @@ const MapComponent: React.FC = () => {
 
   return (
     <div>
+        <input type="text" placeholder="Search for a state"/>
       <div ref={mapContainerRef} style={{ width: '100%', height: '100vh' }} />
     </div>
   );
 };
 
-export default MapComponent;
+export default memo(MapComponent);
