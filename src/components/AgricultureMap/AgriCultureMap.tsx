@@ -337,9 +337,7 @@ const EnhancedAgricultureMap: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const PropertyCard = ({ property , center }: { property: any }) => {
     console.log(property)
-   return <div className="overflow-auto bg-white rounded-lg shadow-md" onClick={()=>{
-    handlePropertyClick(property.center)
-   }}>
+   return <div className="overflow-auto bg-white rounded-lg shadow-md" >
            <ImageGallery images={JSON.parse(property.images)} />
 
       <div className="relative bg-gray-200">
@@ -378,6 +376,11 @@ const EnhancedAgricultureMap: React.FC = () => {
           {property.description}
         </p>
       </div>
+    <div className="w-full border">
+    <Button variant={'ghost'} className="w-full" onClick={()=>{
+    handlePropertyClick(property.center)
+   }}>Go To Location</Button>
+    </div>
     </div>
   };
 
