@@ -163,60 +163,60 @@ export const PROPERTY_DATA : GeoJSON.FeatureCollection  = {
             }
           }
         },
-        {
-          "type": "Feature",
-          "geometry": {
-            "type": "Polygon",
-            "coordinates": [
-              [
-                [74.95648213502051, 31.55801774087041],
-                [74.95906410760054, 31.558024367756843],
-                [74.95900966841941, 31.557500842291375],
-                [74.95884635087717, 31.557487588443635],
-                [74.95884635087717, 31.55701707564097],
-                [74.95648213502051, 31.556990567807148],
-                [74.95648213502051, 31.55801774087041]
-              ]
-            ]
-          },
-          "properties": {
-            "images":[
-              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0MHIA-vmlDuaeFomIJ8otoJ-TprTfJZD1lg&s", alt:"feild"},
-              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMf_1iUUZNO5E1mt0kk4yi2-GcbMWxqG_jWw&s",alt:""},
-              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhy9iWANYUUm1UUtowQZfwyrHmeefcDUyaYQ&s",alt:""},
-              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMf_1iUUZNO5E1mt0kk4yi2-GcbMWxqG_jWw&s",alt:""},
-              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe6X4T_8WRvvgO_Oo44ZTcisb1m-CgVV6FDA&s",alt:""},
-              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhy9iWANYUUm1UUtowQZfwyrHmeefcDUyaYQ&s",alt:""},
-            ],
-            "id": "prop004",
-            "postalCode": "146021",
-            "placeName": "146021, Hoshiarpur, Punjab, India",
-            "description": "Fertile land with excellent water resources",
-            "ownerName": "Harjinder Kaur",
-            "price": 8000000,
-            "priceFixed": true,
-            "area": 5.5, // in acres
-            "soilType": "Clay loam",
-            "waterSource": "River irrigation",
-            "cropTypes": ["Rice", "Mustard", "Vegetables"],
-            "organicCertified": false,
-            "yearAcquired": 2000,
-            "lastHarvest": "2023-10-05",
-            "yieldPerAcre": 3.5, // in tons
-            "nearestMarket": "Bassi Gulam Hussain Mandi",
-            "distanceToMarket": 8, // in km
-            "roadAccess": "Paved road",
-            "electricityAvailable": true,
-            "center":   [74.95906410760054, 31.558024367756843],
-            "locationContext": {
-              "locality": "Bassi Gulam Hussain",
-              "place": "Hoshiarpur",
-              "district": "Hoshiarpur",
-              "region": "Punjab",
-              "country": "India"
-            }
-          }
-        },
+        // {
+        //   "type": "Feature",
+        //   "geometry": {
+        //     "type": "Polygon",
+        //     "coordinates": [
+        //       [
+        //         [74.95648213502051, 31.55801774087041],
+        //         [74.95906410760054, 31.558024367756843],
+        //         [74.95900966841941, 31.557500842291375],
+        //         [74.95884635087717, 31.557487588443635],
+        //         [74.95884635087717, 31.55701707564097],
+        //         [74.95648213502051, 31.556990567807148],
+        //         [74.95648213502051, 31.55801774087041]
+        //       ]
+        //     ]
+        //   },
+        //   "properties": {
+        //     "images":[
+        //       {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0MHIA-vmlDuaeFomIJ8otoJ-TprTfJZD1lg&s", alt:"feild"},
+        //       {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMf_1iUUZNO5E1mt0kk4yi2-GcbMWxqG_jWw&s",alt:""},
+        //       {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhy9iWANYUUm1UUtowQZfwyrHmeefcDUyaYQ&s",alt:""},
+        //       {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMf_1iUUZNO5E1mt0kk4yi2-GcbMWxqG_jWw&s",alt:""},
+        //       {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe6X4T_8WRvvgO_Oo44ZTcisb1m-CgVV6FDA&s",alt:""},
+        //       {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhy9iWANYUUm1UUtowQZfwyrHmeefcDUyaYQ&s",alt:""},
+        //     ],
+        //     "id": "prop004",
+        //     "postalCode": "146021",
+        //     "placeName": "146021, Hoshiarpur, Punjab, India",
+        //     "description": "Fertile land with excellent water resources",
+        //     "ownerName": "Harjinder Kaur",
+        //     "price": 8000000,
+        //     "priceFixed": true,
+        //     "area": 5.5, // in acres
+        //     "soilType": "Clay loam",
+        //     "waterSource": "River irrigation",
+        //     "cropTypes": ["Rice", "Mustard", "Vegetables"],
+        //     "organicCertified": false,
+        //     "yearAcquired": 2000,
+        //     "lastHarvest": "2023-10-05",
+        //     "yieldPerAcre": 3.5, // in tons
+        //     "nearestMarket": "Bassi Gulam Hussain Mandi",
+        //     "distanceToMarket": 8, // in km
+        //     "roadAccess": "Paved road",
+        //     "electricityAvailable": true,
+        //     "center":   [74.95906410760054, 31.558024367756843],
+        //     "locationContext": {
+        //       "locality": "Bassi Gulam Hussain",
+        //       "place": "Hoshiarpur",
+        //       "district": "Hoshiarpur",
+        //       "region": "Punjab",
+        //       "country": "India"
+        //     }
+        //   }
+        // },
         {
           "type": "Feature",
           "geometry": {
@@ -264,6 +264,206 @@ export const PROPERTY_DATA : GeoJSON.FeatureCollection  = {
             "center":   [75.95900966841941, 31.557500842291375],
             "locationContext": {
               "locality": "Bassi Gulam Hussain",
+              "place": "Hoshiarpur",
+              "district": "Hoshiarpur",
+              "region": "Punjab",
+              "country": "India"
+            }
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [75.93578192562768, 31.560508377262323],
+                [75.93581509326404, 31.56044871356552],
+                [75.93601041379458, 31.560184936764784],
+                [75.93601041379458, 31.559676222257295],
+                [75.93568979330175, 31.559666801592343],
+                [75.93572296094013, 31.560184936764784],
+                [75.93571927564653, 31.56038276943508],
+                [75.93578192562768, 31.560508377262323]
+              ]
+            ]
+          },
+          "properties": {
+            "images":[
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0MHIA-vmlDuaeFomIJ8otoJ-TprTfJZD1lg&s", alt:"feild"},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6XPweVnemIjNWSbCC6b464GMA1OuH7v0Qkw&s",alt:""},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXmsSgjJgUQwlH-H4wPzhOwQ3aPTPq86-3hA&s",alt:""},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6XPweVnemIjNWSbCC6b464GMA1OuH7v0Qkw&s",alt:""},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrmKx0Jg0vGWa62gwA7AKZg7U1jiZCgNNcRg&s",alt:""},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6XPweVnemIjNWSbCC6b464GMA1OuH7v0Qkw&s",alt:""},
+            ],
+            "id": "propNhdfd3",
+            "postalCode": "Nh3",
+            "placeName": "Nh3, 146001, Kotli Gounspur, Hoshiarpur, Hoshiarpur, Punjab, India",
+            "description": "Agricultural land located on NH3 with easy access to Hoshiarpur markets",
+            "ownerName": "Rajinder Singh",
+            "price": 7500000,
+            "priceFixed": false,
+            "area": 5.0,
+            "soilType": "Clay",
+            "waterSource": "Canal irrigation",
+            "cropTypes": ["Rice", "Sugarcane", "Vegetables"],
+            "organicCertified": true,
+            "yearAcquired": 2012,
+            "lastHarvest": "2023-11-05",
+            "yieldPerAcre": 3.0,
+            "nearestMarket": "Hoshiarpur City Market",
+            "distanceToMarket": 10,
+            "roadAccess": "Paved highway",
+            "electricityAvailable": true,
+            "center": [75.933509, 31.5628],
+            "locationContext": {
+              "locality": "Kotli Gounspur",
+              "place": "Hoshiarpur",
+              "district": "Hoshiarpur",
+              "region": "Punjab",
+              "country": "India"
+            }
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [75.85969605755167, 31.69239873244419],
+                [75.86014318565233, 31.69240674197499],
+                [75.86022319804908, 31.693295795578436],
+                [75.86069856581727, 31.693327833387315],
+                [75.86072061268311, 31.693328501017405],
+                [75.86072061268311, 31.69334062060844],
+                [75.86072441100958, 31.69334870033518],
+                [75.86073295724535, 31.693351124252445],
+                [75.86073675557185, 31.693356780060327],
+                [75.86074103529137, 31.693695883240153],
+                [75.86074624563275, 31.69413373466746],
+                [75.8607435199414, 31.694146195940988],
+                [75.86073852667354, 31.694158334785484],
+                [75.86072996678584, 31.69416470767824],
+                [75.86071926692668, 31.69416713544652],
+                [75.86069537057199, 31.694171990983534],
+                [75.8606675509375, 31.69417290139647],
+                [75.86040128596815, 31.69417857417757],
+                [75.86036997747371, 31.694176959675957],
+                [75.86036333627791, 31.694165658159577],
+                [75.86026184728755, 31.69401141247282],
+                [75.86014526687893, 31.6938326015067],
+                [75.86008237481647, 31.693737322530495],
+                [75.8599490874137, 31.693430636952684],
+                [75.85969605755167, 31.69239873244419]
+              ]
+            ]
+          },
+          "properties": {
+            "images":[
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0MHIA-vmlDuaeFomIJ8otoJ-TprTfJZD1lg&s", alt:"feild"},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6XPweVnemIjNWSbCC6b464GMA1OuH7v0Qkw&s",alt:""},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXmsSgjJgUQwlH-H4wPzhOwQ3aPTPq86-3hA&s",alt:""},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6XPweVnemIjNWSbCC6b464GMA1OuH7v0Qkw&s",alt:""},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrmKx0Jg0vGWa62gwA7AKZg7U1jiZCgNNcRg&s",alt:""},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6XPweVnemIjNWSbCC6b464GMA1OuH7v0Qkw&s",alt:""},
+            ],
+            "id": "prop144209dfdfs",
+            "postalCode": "144209",
+            "placeName": "144209, Hoshiarpur, Punjab, India",
+            "description": "Commercial land available near Janauri, Hoshiarpur with great development potential",
+            "ownerName": "Gurmeet Singh",
+            "price": 15000000,
+            "priceFixed": false,
+            "area": 10.0,
+            "soilType": "Loamy",
+            "waterSource": "Borewell",
+            "cropTypes": ["Cotton", "Wheat", "Mustard"],
+            "organicCertified": false,
+            "yearAcquired": 2010,
+            "lastHarvest": "2023-11-15",
+            "yieldPerAcre": 2.5,
+            "nearestMarket": "Hoshiarpur Main Market",
+            "distanceToMarket": 12,
+            "roadAccess": "Paved road with good connectivity",
+            "electricityAvailable": true,
+            "center": [75.887355, 31.70175],
+            "locationContext": {
+              "locality": "Janauri",
+              "place": "Hoshiarpur",
+              "district": "Hoshiarpur",
+              "region": "Punjab",
+              "country": "India"
+            }
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [75.85938683903765, 31.487191342985412],
+                [75.86031835870997, 31.48725982226017],
+                [75.86093937182477, 31.48734199732334],
+                [75.86094472538554, 31.48730090980048],
+                [75.86165139548228, 31.487392215381917],
+                [75.86173169890208, 31.487446998687844],
+                [75.86248119748907, 31.487451563961343],
+                [75.8630379678678, 31.487428737589013],
+                [75.86298978581542, 31.486260019877037],
+                [75.8629844322547, 31.48520542222174],
+                [75.86297626113455, 31.48513650104843],
+                [75.86296221974399, 31.48509781530393],
+                [75.86295573910238, 31.485080314605057],
+                [75.86292333589262, 31.485058208454603],
+                [75.86289417300429, 31.485038865568157],
+                [75.8628444880838, 31.485029654667983],
+                [75.86205388424477, 31.484982307299276],
+                [75.86135768566399, 31.485040229446923],
+                [75.86104071720479, 31.485006441531667],
+                [75.86019169454556, 31.484991960992573],
+                [75.85938261161445, 31.484975870807332],
+                [75.85929455937844, 31.484977748030445],
+                [75.85931657243748, 31.485270594411574],
+                [75.85934078680151, 31.485595352466788],
+                [75.85936971643312, 31.48650951600351],
+                [75.85938683903765, 31.487191342985412]
+              ]
+            ]
+          },
+          "properties": {
+            "images":[
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0MHIA-vmlDuaeFomIJ8otoJ-TprTfJZD1lg&s", alt:"feild"},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6XPweVnemIjNWSbCC6b464GMA1OuH7v0Qkw&s",alt:""},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXmsSgjJgUQwlH-H4wPzhOwQ3aPTPq86-3hA&s",alt:""},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6XPweVnemIjNWSbCC6b464GMA1OuH7v0Qkw&s",alt:""},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrmKx0Jg0vGWa62gwA7AKZg7U1jiZCgNNcRg&s",alt:""},
+              {src:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6XPweVnemIjNWSbCC6b464GMA1OuH7v0Qkw&s",alt:""},
+            ],
+            "id": "prop146111",
+            "postalCode": "146111",
+            "placeName": "146111, Hoshiarpur, Punjab, India",
+            "description": "Agricultural land for sale in Kahri, Hoshiarpur. Suitable for crop farming.",
+            "ownerName": "Harvinder Kaur",
+            "price": 12000000,
+            "priceFixed": true,
+            "area": 15.0,
+            "soilType": "Sandy Loam",
+            "waterSource": "Canal",
+            "cropTypes": ["Rice", "Sugarcane", "Maize"],
+            "organicCertified": true,
+            "yearAcquired": 2015,
+            "lastHarvest": "2023-11-05",
+            "yieldPerAcre": 3.0,
+            "nearestMarket": "Kahri Market",
+            "distanceToMarket": 10,
+            "roadAccess": "Good road access, nearby village connection",
+            "electricityAvailable": true,
+            "center": [75.892787, 31.50101],
+            "locationContext": {
+              "locality": "Kahri",
               "place": "Hoshiarpur",
               "district": "Hoshiarpur",
               "region": "Punjab",

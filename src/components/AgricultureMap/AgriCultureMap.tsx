@@ -28,6 +28,8 @@ import { TOKEN } from "../../lib/constants";
 import { cn } from "@/lib/utils";
 import { PROPERTIES, PROPERTY } from "@/lib/types";
 import { ImageGallery } from "../ImageGallery/ImageGallery";
+import * as turf from "@turf/turf";
+import { PropertyDialog } from "../Dialogs/PropertyDialog";
 
 mapboxgl.accessToken = TOKEN;
 
@@ -47,7 +49,7 @@ const PRICE_RANGES = [
 ];
 
 const EnhancedAgricultureMap: React.FC = () => {
-  console.log("MAP RENDEREDDDDDDDDDDDDD")
+  console.log("MAP RENDEREDDDDDDDDDDDDD");
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -64,31 +66,66 @@ const EnhancedAgricultureMap: React.FC = () => {
     maxArea: 10,
   });
   const [savedProperties, setSavedProperties] = useState<string[]>([]);
+  const [showPropertyDialog , setShowPropertyDialog] = useState<boolean>(false);
+
+
+  const closeDialog = () => setShowPropertyDialog(false);
+  const openDialog = () => setShowPropertyDialog(true);
 
   useEffect(() => {
     if (mapContainerRef.current) {
       map.current = new mapboxgl.Map({
         container: mapContainerRef.current,
         style: "mapbox://styles/mapbox/satellite-streets-v11",
-        center: [75.841481, 31.635354],
-        zoom: 10,
       });
+
+      const bbox = turf.bbox(PROPERTY_DATA);
+      const centroid = turf.centroid(PROPERTY_DATA);
+      const bboxPolygon = turf.bboxPolygon(bbox);
+      console.log(bboxPolygon);
+      console.log("bboxPolygon");
+
+      const bounds = new mapboxgl.LngLatBounds();
+      bboxPolygon.geometry.coordinates.forEach((coord) => bounds.extend(coord));
+
+   
 
       map.current.on("load", () => {
         if (map.current) {
-         
-
-          map.current.addSource("properties", {
-            type: "geojson",
-            data: PROPERTY_DATA
+          map.current.fitBounds(bbox as [number, number, number, number], {
+            padding: 50,
+            maxZoom: 15,
           });
 
+
+     
+    
   
+          map.current.addSource("properties", {
+            type: "geojson",
+            data: PROPERTY_DATA,
+          });
+
+          map.current.addSource("bbox", {
+            type: "geojson",
+            data: bboxPolygon,
+          });
+
+          map.current.addLayer({
+            id: "bbox-layer",
+            type: "line",
+            source: "bbox",
+            paint: {
+              "line-color": "#ff0000", // Line color for the bounding box
+              "line-width": 2, // Line width for the bounding box
+            },
+          });
+
           map.current.addLayer({
             id: "clusters",
             type: "circle",
             source: "properties",
-            filter: ["has", "point_count"],
+            // filter: ["has", "point_count"],
             paint: {
               "circle-color": [
                 "step",
@@ -111,12 +148,11 @@ const EnhancedAgricultureMap: React.FC = () => {
             },
           });
 
-        
           map.current.addLayer({
             id: "cluster-count",
             type: "symbol",
             source: "properties",
-            filter: ["has", "point_count"],
+            // filter: ["has", "point_count"],
             layout: {
               "text-field": "{point_count_abbreviated}",
               "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
@@ -127,8 +163,6 @@ const EnhancedAgricultureMap: React.FC = () => {
             },
           });
 
-
-        
           map.current.addLayer({
             id: "property-layer",
             type: "fill",
@@ -226,41 +260,36 @@ const EnhancedAgricultureMap: React.FC = () => {
     };
   }, []);
 
-
   const handlePropertyClick = (center) => {
     console.log(center);
-    console.log(typeof center)
-    console.log(typeof center[0])
-    const centerArray = JSON.parse(center)
- 
-    console.log('handlePropertyClick called with:', center);
+    console.log(typeof center);
+    console.log(typeof center[0]);
+    const centerArray = JSON.parse(center);
 
-    
+    console.log("handlePropertyClick called with:", center);
+
     if (map.current) {
       try {
-     
-       
         map.current.flyTo({
           center: centerArray,
-          zoom:16
-         
-      });
+          zoom: 16,
+        });
       } catch (error) {
-        console.error('Error flying to location:', error);
+        console.error("Error flying to location:", error);
       }
     } else {
-      console.error('Map instance is null or undefined');
+      console.error("Map instance is null or undefined");
     }
   };
-  
+
   const updateVisibleProperties = () => {
     if (map.current) {
       const features = map.current.queryRenderedFeatures({
         layers: ["property-layer"],
       });
 
-      console.log(features)
-      console.log("features")
+      console.log(features);
+      console.log("features");
 
       const uniqueFeatures = features.filter((feature, index) => {
         const id = feature.properties?.id;
@@ -271,7 +300,7 @@ const EnhancedAgricultureMap: React.FC = () => {
         uniqueFeatures.map((f) => f.properties!) as PROPERTIES[]
       );
 
-      console.log(uniqueFeatures)
+      console.log(uniqueFeatures);
     }
   };
 
@@ -282,6 +311,8 @@ const EnhancedAgricultureMap: React.FC = () => {
         const matchesSearch =
           props.placeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           props.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+          console.log(matchesSearch)
         const matchesSoilType =
           filters.soilType === "All Types" ||
           props.soilType === filters.soilType;
@@ -293,11 +324,12 @@ const EnhancedAgricultureMap: React.FC = () => {
           props.area >= filters.minArea && props.area <= filters.maxArea;
 
         return (
-          matchesSearch &&
-          matchesSoilType &&
-          matchesPrice &&
-          matchesOrganic &&
-          matchesArea
+          matchesSearch 
+          // &&
+          // matchesSoilType &&
+          // matchesPrice &&
+          // matchesOrganic &&
+          // matchesArea
         );
       }
     });
@@ -314,7 +346,10 @@ const EnhancedAgricultureMap: React.FC = () => {
       if (filteredFeatures.length > 0) {
         const bounds = new mapboxgl.LngLatBounds();
         filteredFeatures.forEach((feature) => {
-          if (feature.geometry.type === 'Point' || feature.geometry.type === 'Polygon') {
+          if (
+            feature.geometry.type === "Point" ||
+            feature.geometry.type === "Polygon"
+          ) {
             const coords = feature.geometry.coordinates[0];
             if (Array.isArray(coords)) {
               coords.forEach((coord: number[]) => {
@@ -335,60 +370,71 @@ const EnhancedAgricultureMap: React.FC = () => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const PropertyCard = ({ property , center }: { property: any }) => {
-    console.log(property)
-   return <div className="overflow-auto bg-white rounded-lg shadow-md" >
-           <ImageGallery images={JSON.parse(property.images)} />
+  const PropertyCard = ({ property, center }: { property: any }) => {
+    console.log(property);
+    return (
+      <div className="overflow-auto bg-white rounded-lg shadow-md">
+        <ImageGallery images={JSON.parse(property.images)} />
 
-      <div className="relative bg-gray-200">
-  
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-2 right-2 bg-white/80 hover:bg-white"
-          onClick={() => toggleSavedProperty(property.id)}
-        >
-          <Heart
-            className={cn(
-              "h-5 w-5",
-              savedProperties.includes(property.id)
-                ? "fill-red-500 text-red-500"
-                : "text-gray-500"
-            )}
-          />
-        </Button>
-      </div>
-      <div className="p-4">
-        <div className="flex items-start justify-between mb-2">
-          <div>
-            <h3 className="text-lg font-semibold">
-              ₹{(property.price / 100000).toFixed(1)}L
-            </h3>
-            <p className="text-sm text-gray-600">{property.placeName}</p>
+        <div className="relative bg-gray-200">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-2 right-2 bg-white/80 hover:bg-white"
+            onClick={() => toggleSavedProperty(property.id)}
+          >
+            <Heart
+              className={cn(
+                "h-5 w-5",
+                savedProperties.includes(property.id)
+                  ? "fill-red-500 text-red-500"
+                  : "text-gray-500"
+              )}
+            />
+          </Button>
+        </div>
+        <div className="p-4" onClick={openDialog}>
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <h3 className="text-lg font-semibold">
+                ₹{(property.price / 100000).toFixed(1)}L
+              </h3>
+              <p className="text-sm text-gray-600">{property.placeName}</p>
+            </div>
+            <span>{property.organicCertified ? "Organic" : "Non-Organic"}</span>
           </div>
-          <span>{property.organicCertified ? "Organic" : "Non-Organic"}</span>
+          <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
+            <div>Area: {property.area} acres</div>
+            <div>Soil: {property.soilType}</div>
+          </div>
+          <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+            {property.description}
+          </p>
         </div>
-        <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
-          <div>Area: {property.area} acres</div>
-          <div>Soil: {property.soilType}</div>
+        <div className="w-full border">
+          <Button
+            variant={"ghost"}
+            className="w-full"
+            onClick={() => {
+              handlePropertyClick(property.center);
+            }}
+          >
+            Go To Location
+          </Button>
         </div>
-        <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-          {property.description}
-        </p>
       </div>
-    <div className="w-full border">
-    <Button variant={'ghost'} className="w-full" onClick={()=>{
-    handlePropertyClick(property.center)
-   }}>Go To Location</Button>
-    </div>
-    </div>
+    );
   };
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       <div className="sticky bg-white border-b">
         <div className="container flex items-center gap-4 px-4 py-3 mx-auto">
+        <div className="">
+              <h1 className="text-2xl font-bold">AgriEstate</h1>
+            </div>
           <div className="flex items-center flex-1 gap-2">
+          
             <Input
               type="text"
               placeholder="Search by location or description..."
@@ -488,7 +534,11 @@ const EnhancedAgricultureMap: React.FC = () => {
                   <Button
                     onClick={() => {
                       handleSearch();
-                      (document.querySelector("[data-sheet-close]") as HTMLElement)?.click();
+                      (
+                        document.querySelector(
+                          "[data-sheet-close]"
+                        ) as HTMLElement
+                      )?.click();
                     }}
                   >
                     Apply Filters
@@ -517,11 +567,11 @@ const EnhancedAgricultureMap: React.FC = () => {
           </div>
         </div>
       </div>
-
+      
       <div className="flex flex-1">
         {viewMode === "map" ? (
           <>
-            <div className="relative flex-1" ref={mapContainerRef}>
+            <div className="flex-1 h-[90%] relative " ref={mapContainerRef}>
               {selectedProperty && (
                 <div className="absolute z-10 top-4 right-4 w-80">
                   <div className="p-4 bg-white rounded-lg shadow-lg">
@@ -578,16 +628,20 @@ const EnhancedAgricultureMap: React.FC = () => {
                 </div>
               )}
             </div>
-            <div className="overflow-auto bg-white border-l w-96">
+            <div className="h-screen overflow-auto bg-white border-l w-96">
               <div className="p-4 space-y-4">
                 {visibleProperties.map((property, index) => (
+                 <>
                   <PropertyCard
                     key={property.id || index}
                     property={property}
                   />
+                  <PropertyDialog property={property} isOpen={showPropertyDialog} onClose={closeDialog}/>
+                 </>
                 ))}
               </div>
             </div>
+          
           </>
         ) : (
           <div className="flex-1 p-4 bg-white">

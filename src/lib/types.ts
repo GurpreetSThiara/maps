@@ -7,6 +7,7 @@ interface LocationContext {
   }
   
   export interface PROPERTIES {
+    images:string[]
     id: string;
     postalCode: string;
     placeName: string;
