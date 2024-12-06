@@ -1,120 +1,160 @@
-import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+import React, { useEffect, useRef, useState } from "react";
+import mapboxgl, { Map } from "mapbox-gl";
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
+import "mapbox-gl/dist/mapbox-gl.css";
+import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
+import { TOKEN } from "@/lib/constants";
+import { Feature, GeoJsonProperties, Geometry, Polygon } from "geojson";
 
 const paragraphStyle = {
-  fontFamily: 'Open Sans',
+  fontFamily: "Open Sans",
   margin: 0,
-  fontSize: 13
+  fontSize: 13,
 };
 
-const MapboxExample = () => {
-  const mapContainerRef = useRef();
-  const mapRef = useRef();
-  const [polygonCoordinates, setPolygonCoordinates] = useState([]);
-  const [locationInfo, setLocationInfo] = useState(null); // New state to hold location info
+interface LocationInfo {
+  postalCode: string;
+  placeName: string;
+  boundingBox: number[];
+  coordinates: { latitude: number; longitude: number }[];
+  center: number[];
+  locationContext: {
+    locality: string;
+    place: string;
+    district: string;
+    region: string;
+    country: string;
+  };
+}
+
+const CalcMapCoordinates = () => {
+  const mapContainerRef = useRef(null);
+  const mapRef = useRef<Map | null>(null);
+  const [polygonCoordinates, setPolygonCoordinates] = useState<
+    { latitude: number; longitude: number }[]
+  >([]);
+  const [locationInfo, setLocationInfo] = useState<LocationInfo | null>(null);
+  
+  const [poligons, setPoligons] = useState<
+    (Polygon | Feature<Geometry, GeoJsonProperties>)[]
+  >([]);
 
   console.log(polygonCoordinates);
-  console.log(locationInfo); // Log the location info
+  console.log(locationInfo);
 
   useEffect(() => {
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoicGFwYWtpcGFyaSIsImEiOiJjbTN3cDd5cWMxZGRjMmxzZmZ6Nmh1bzl6In0.APXachcFlnNYTKjENUSFYw";
+    mapboxgl.accessToken = TOKEN;
 
-    // Initialize map
     mapRef.current = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      style: 'mapbox://styles/mapbox/satellite-streets-v11',
-      center: [75.90, 31.63],
-      zoom: 12
+      container: mapContainerRef.current!,
+      style:"mapbox://styles/mapbox/streets-v9",// "mapbox://styles/mapbox/satellite-streets-v11",
+      center: [75.9, 31.63],
+      zoom: 12,
     });
 
     const draw = new MapboxDraw({
       displayControlsDefault: false,
       controls: {
         polygon: true,
-        trash: true
+        trash: true,
       },
-      defaultMode: 'draw_polygon'
+      defaultMode: "draw_polygon",
     });
 
     mapRef.current.addControl(draw);
 
-    // Add event listeners for draw actions
-    mapRef.current.on('draw.create', updateCoordinates);
-    mapRef.current.on('draw.delete', updateCoordinates);
-    mapRef.current.on('draw.update', updateCoordinates);
+    mapRef.current.on("draw.create", updateCoordinates);
+    mapRef.current.on("draw.delete", updateCoordinates);
+    mapRef.current.on("draw.update", updateCoordinates);
 
     function updateCoordinates(e) {
       const data = draw.getAll();
       if (data.features.length > 0) {
+        console.log(data)
         const polygon = data.features[0];
-        const coordinates = polygon.geometry.coordinates[0]; // Outer ring of the polygon
 
-        // Transform coordinates into array of objects
-        const formattedCoordinates = coordinates.map(([longitude, latitude]) => ({
-          latitude,
-          longitude
-        }));
+        console.log(polygon);
 
-        // Set polygon coordinates
+        setPoligons((prev) => [...prev, polygon]);
+        const coordinates = (polygon.geometry as Polygon).coordinates[0];
+
+        const formattedCoordinates = coordinates.map(
+          ([longitude, latitude]) => ({
+            latitude,
+            longitude,
+          })
+        );
+
         setPolygonCoordinates(formattedCoordinates);
-
-        // Fetch location info from Mapbox API
-        const center = polygon.geometry.coordinates[0][0]; // Taking the first coordinate for center
-        getLocationInfo(center[0], center[1], formattedCoordinates); // Fetch location info for the center
+        const center = (polygon.geometry as Polygon).coordinates[0][0];
+        getLocationInfo(center[0], center[1], formattedCoordinates);
       } else {
         setPolygonCoordinates([]);
-        if (e.type !== 'draw.delete') alert('Click the map to draw a polygon.');
+        if (e.type !== "draw.delete") alert("Click the map to draw a polygon.");
       }
     }
 
     // Function to fetch location information from Mapbox API based on coordinates
-    async function getLocationInfo(longitude, latitude,formattedCoordinates) {
-      const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxgl.accessToken}`);
+    async function getLocationInfo(
+      longitude: number,
+      latitude: number,
+      formattedCoordinates: { latitude: number; longitude: number }[]
+    ) {
+      const response = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxgl.accessToken}`
+      );
       const data = await response.json();
-      
-      const place = data.features[0]; // Taking the first result
 
-      // Extract relevant information
+      const place = data.features[0];
+
       const extractedData = {
         postalCode: place.text,
         placeName: place.place_name,
         boundingBox: place.bbox,
-        coordinates:formattedCoordinates,
+        coordinates: formattedCoordinates,
         center: place.center,
         locationContext: {
-          locality: place.context.find(c => c.id.includes('locality'))?.text || 'N/A',
-          place: place.context.find(c => c.id.includes('place'))?.text || 'N/A',
-          district: place.context.find(c => c.id.includes('district'))?.text || 'N/A',
-          region: place.context.find(c => c.id.includes('region'))?.text || 'N/A',
-          country: place.context.find(c => c.id.includes('country'))?.text || 'N/A',
-        }
+          locality:
+            place.context.find((c: { id: string }) => c.id.includes("locality"))
+              ?.text || "N/A",
+          place:
+            place.context.find((c: { id: string }) => c.id.includes("place"))
+              ?.text || "N/A",
+          district:
+            place.context.find((c: { id: string }) => c.id.includes("district"))
+              ?.text || "N/A",
+          region:
+            place.context.find((c: { id: string }) => c.id.includes("region"))
+              ?.text || "N/A",
+          country:
+            place.context.find((c: { id: string }) => c.id.includes("country"))
+              ?.text || "N/A",
+        },
       };
 
-      // Update the location info state with the extracted data
       setLocationInfo(extractedData);
-      
     }
   }, []);
 
   return (
     <>
-      <div className="h-[50rem] w-[100rem]" ref={mapContainerRef} id="map"></div>
+      <div
+        className="h-[50rem] w-[100rem]"
+        ref={mapContainerRef}
+        id="map"
+      ></div>
       <div
         className="calculation-box"
         style={{
           height: 150,
           width: 300,
-          position: 'absolute',
+          position: "absolute",
           bottom: 40,
           left: 10,
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
           padding: 15,
-          textAlign: 'center',
-          overflowY: 'auto'
+          textAlign: "center",
+          overflowY: "auto",
         }}
       >
         <p style={paragraphStyle}>Click the map to draw a polygon.</p>
@@ -124,10 +164,11 @@ const MapboxExample = () => {
               <p style={paragraphStyle}>
                 <strong>Coordinates:</strong>
               </p>
-              <ul style={{ textAlign: 'left', fontSize: 12, padding: 0 }}>
+              <ul style={{ textAlign: "left", fontSize: 12, padding: 0 }}>
                 {polygonCoordinates.map((coord, index) => (
                   <li key={index}>
-                    Latitude: {coord.latitude.toFixed(6)}, Longitude: {coord.longitude.toFixed(6)}
+                    Latitude: {coord.latitude.toFixed(6)}, Longitude:{" "}
+                    {coord.longitude.toFixed(6)}
                   </li>
                 ))}
               </ul>
@@ -136,17 +177,17 @@ const MapboxExample = () => {
             <p style={paragraphStyle}>No polygon selected.</p>
           )}
         </div>
-        
+
         {locationInfo && (
           <div id="location-info">
             <p style={paragraphStyle}>
               <strong>Location Info:</strong>
             </p>
-            <ul style={{ textAlign: 'left', fontSize: 12, padding: 0 }}>
+            <ul style={{ textAlign: "left", fontSize: 12, padding: 0 }}>
               <li>Postal Code: {locationInfo.postalCode}</li>
               <li>Place Name: {locationInfo.placeName}</li>
               {/* <li>Coordinates: {locationInfo.coordinates[1].toFixed(6)}, {locationInfo.coordinates[0].toFixed(6)}</li> */}
-              <li>Bounding Box: {locationInfo.boundingBox?.join(', ')}</li>
+              <li>Bounding Box: {locationInfo.boundingBox?.join(", ")}</li>
               <li>Locality: {locationInfo.locationContext.locality}</li>
               <li>Place: {locationInfo.locationContext.place}</li>
               <li>District: {locationInfo.locationContext.district}</li>
@@ -160,4 +201,4 @@ const MapboxExample = () => {
   );
 };
 
-export default MapboxExample;
+export default CalcMapCoordinates;

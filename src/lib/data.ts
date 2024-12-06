@@ -529,4 +529,3 @@ export const PROPERTY_DATA : GeoJSON.FeatureCollection  = {
       ]
 };
   
-  

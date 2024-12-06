@@ -11,7 +11,7 @@ import { PROPERTIES } from '@/lib/types'
 
 export function PropertyDialog({ isOpen = true, onClose, property }:   {property:PROPERTIES, isOpen: boolean; onClose: () => void }) {
     console.log("first")
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose} >
