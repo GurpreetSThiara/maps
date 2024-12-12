@@ -34,15 +34,31 @@ const mapDataSlice = createSlice({
             const { payload: level } = action;
             console.log("Setting map level:", level);
             state.level = level;
+            if(level === 'city' || level === 'province'){
+                state.data = US_DENSITY_DATA_MERGED_COORDINATES
+            }
         },
         setMapData: (state, action) => {
             const { payload: data } = action;
             console.log("Setting map data:", data);
-            state.data = data;
+           
+    // Check if the incoming data is the same as the current state data
+    if (JSON.stringify(data) !== JSON.stringify(state.data)) {
+        console.log("not equal dattatadtasdasjfgjhsd f,nbjkfdnb")
+        state.data = data; // Only update if the data is different
+    }
         },
+
+        addMapData:(state,action) => {
+            const { payload: data } = action;
+            if(state.data){
+                
+                state.data.features.push(data);
+            }
+        }
     },
 });
 
-export const { setMapBounds, setMapZoomLevel, setMapLevel, setMapData,setProvince } = mapDataSlice.actions;
+export const { setMapBounds, setMapZoomLevel, setMapLevel, setMapData,setProvince,addMapData } = mapDataSlice.actions;
 
 export default mapDataSlice;
